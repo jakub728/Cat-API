@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import catRouter from "./routes/catRouter.js";
 
 const app = express();
 
@@ -16,25 +17,10 @@ app.get("/", (req, res) => {
   res.json("Simple Animal App");
 });
 
-app.get("/cat", (req, res) => {
-  async function fetchCats() {
-    try {
-      const response = await fetch(
-        `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng&api_key=${process.env.KEY}`
-      );
+app.use("/cat", catRouter);
 
-      if (response.ok) {
-        const data = await response.json();
-
-        res.status(200).json(data);
-      } else {
-        throw new Error("Could not fetch");
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
-  fetchCats();
+app.get("/", (req, res) => {
+  res.json("Simple Animal App");
 });
 
 //* Global Error Handler
